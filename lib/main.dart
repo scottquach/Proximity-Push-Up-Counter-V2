@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:proximity_pushup_counter_v2/pages/home.dart';
+import 'package:proximity_pushup_counter_v2/pages/logs.dart';
+import 'package:proximity_pushup_counter_v2/pages/session.dart';
 import 'package:proximity_pushup_counter_v2/session.dart';
 
 void main() {
@@ -10,173 +13,39 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-          // This makes the visual density adapt to the platform that you run
-          // the app on. For desktop platforms, the controls will be smaller and
-          // closer together (more dense) than on mobile platforms.
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        // home: MyHomePage(title: 'Flutter Demo Home Page Testing'),
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text('hello world'),
-            centerTitle: true,
-            backgroundColor: Colors.red[600],
-          ),
-          body: SessionPage(),
-        ));
-  }
-}
-
-class HomeHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Padding(
-        padding: EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Text('Get your goals\ndone',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w600)),
-            ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.settings))
-          ],
-        ));
-  }
-}
-
-class SessionPage extends StatefulWidget {
-  @override
-  _SessionPageState createState() => _SessionPageState();
-}
-
-class _SessionPageState extends State<SessionPage> {
-  int progress = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-              child: Container(
-            // decoration: BoxDecoration(
-            //   color: Colors.red,
-            //     borderRadius: BorderRadius.only(
-            //         bottomLeft: Radius.circular(16),
-            //         bottomRight: Radius.circular(16))),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Opacity(
-                    opacity: .75,
-                    child: Text(
-                      'Place phone face up under face to use proximity sensor or tap screen to increment',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.black.withOpacity(0.75)),
-                    ),
-                  ),
-                  Expanded(
-                      child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              progress += 1;
-                            });
-                          },
-                          child: Center(
-                              child: Text('$progress',
-                                  style: TextStyle(fontSize: 144))))),
-                  IconButton(
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 64,
-                    onPressed: () {
-                      setState(() {
-                        if (progress > 0) {
-                          progress -= 1;
-                        }
-                      });
-                    },
-                  )
-                ],
-              ),
-            ),
-          )),
-          Container(
-            padding: EdgeInsets.fromLTRB(48, 24, 48, 24),
-            height: 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Session Time'),
-                    Text(
-                      '00.00.00',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    RaisedButton(
-                      onPressed: () {
-                        setState(() {
-                          progress = 0;
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              new BorderRadius.all(Radius.circular(8))),
-                      child: Text('Reset'),
-                      visualDensity: VisualDensity.compact,
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Today\'s Goal'),
-                    Text(
-                      '25',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
+        // This makes the visual density adapt to the platform that you run
+        // the app on. For desktop platforms, the controls will be smaller and
+        // closer together (more dense) than on mobile platforms.
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        icon: Icon(Icons.stop),
-        label: Text('End Session'),
-      ),
+      // home: MyHomePage(title: 'Flutter Demo Home Page Testing'),
+      // home: Scaffold(
+      //   // appBar: AppBar(
+      //   //   title: Text('hello world'),
+      //   //   centerTitle: true,
+      //   //   backgroundColor: Colors.red[600],
+      //   // ),
+      //   body: SessionPage(),
+      // ),
+      initialRoute: '/home',
+      routes: {
+        '/': (context) => SessionPage(),
+        '/home': (context) => SessionPage(),
+        '/session': (context) => SessionPage(),
+        '/logs': (context) => LogsPage(),
+      },
     );
   }
 }
