@@ -10,11 +10,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: FlatButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/session');
-          },
-          child: Text('Start session'),
+        child: Column(
+          children: [
+            HomeHeader(),
+            FlatButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/session');
+              },
+              child: Text('Start session'),
+            ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proximity_pushup_counter_v2/pages/home.dart';
+import 'package:proximity_pushup_counter_v2/pages/loading.dart';
 import 'package:proximity_pushup_counter_v2/pages/logs.dart';
 import 'package:proximity_pushup_counter_v2/pages/session.dart';
 import 'package:proximity_pushup_counter_v2/session.dart';
@@ -41,8 +42,8 @@ class MyApp extends StatelessWidget {
       // ),
       initialRoute: '/home',
       routes: {
-        '/': (context) => SessionPage(),
-        '/home': (context) => SessionPage(),
+        '/': (context) => LoadingPage(),
+        '/home': (context) => HomePage(),
         '/session': (context) => SessionPage(),
         '/logs': (context) => LogsPage(),
       },
