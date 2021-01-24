@@ -72,7 +72,20 @@ class _SessionPageState extends State<SessionPage> {
                 ),
               ],
             ),
-            ActionItems()
+            ActionItems(
+              reset: () {
+                setState(() {
+                  progress = 0;
+                });
+              },
+              decrement: () {
+                setState(() {
+                  if (progress > 0) {
+                    progress -= 1;
+                  }
+                });
+              },
+            ),
           ],
         ),
       ),
@@ -88,9 +101,10 @@ class _SessionPageState extends State<SessionPage> {
 }
 
 class ActionItems extends StatelessWidget {
-  const ActionItems({
-    Key key,
-  }) : super(key: key);
+  final Function decrement;
+  final Function reset;
+
+  ActionItems({this.reset, this.decrement});
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +129,7 @@ class ActionItems extends StatelessWidget {
                             border: Border.all(color: Colors.grey[500])),
                         child: IconButton(
                           icon: Icon(Icons.replay),
-                          onPressed: () {},
+                          onPressed: reset,
                           padding: EdgeInsets.all(16),
                         ),
                       ),
@@ -127,7 +141,7 @@ class ActionItems extends StatelessWidget {
                           border: Border.all(color: Colors.grey[500])),
                       child: IconButton(
                         icon: Icon(Icons.exposure_minus_1),
-                        onPressed: () {},
+                        onPressed: decrement,
                         padding: EdgeInsets.all(16),
                       ),
                     ),
@@ -155,7 +169,57 @@ class ActionItems extends StatelessWidget {
   }
 }
 
-class SessionTimer extends StatelessWidget {
+class SessionTimer extends StatefulWidget {
+  @override
+  _SessionTimerState createState() => _SessionTimerState();
+}
+
+class _SessionTimerState extends State<SessionTimer> {
+  Stream periodic;
+  int seconds = 0;
+  int minutes = 0;
+  bool started = true;
+
+  String minutesFormatted = '00';
+  String secondsFormatted = '00';
+
+  pad(int num, int size) {
+    var s = "000000000" + num.toString();
+    return s.substring(s.length - size);
+  }
+
+  startPeriodic() {
+    periodic = Stream.periodic(Duration(seconds: 1), (computation) {
+      return computation;
+    });
+    periodic.listen((computation) {
+      print(computation);
+      if (started) {
+        setState(() {
+          this.seconds += 1;
+          if (this.seconds == 10) {
+            this.minutes += 1;
+            this.seconds = 0;
+          }
+          this.minutesFormatted = pad(this.minutes, 2);
+          this.secondsFormatted = pad(this.seconds, 2);
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    this.startPeriodic();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -178,7 +242,7 @@ class SessionTimer extends StatelessWidget {
                 'Session time',
                 style: TextStyle(fontSize: 18),
               ),
-              Text('00:00:00',
+              Text('$minutesFormatted:$secondsFormatted',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36)),
             ],
           ),
