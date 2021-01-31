@@ -49,7 +49,7 @@ class _SessionPageState extends State<SessionPage> {
                             },
                             child: Center(
                               child: StreamBuilder(
-                                  stream: state.progressStream,
+                                  stream: state.countStream,
                                   builder: (BuildContext context,
                                       AsyncSnapshot snap) {
                                     return Text(
@@ -65,7 +65,7 @@ class _SessionPageState extends State<SessionPage> {
                           iconSize: 64,
                           onPressed: () {
                             setState(() {
-                              if (state.progressCurrent > 0) {
+                              if (state.countCurrent > 0) {
                                 state.decrement();
                               }
                             });
@@ -82,7 +82,7 @@ class _SessionPageState extends State<SessionPage> {
                 state.reset();
               },
               decrement: () {
-                if (state.progressCurrent > 0) {
+                if (state.countCurrent > 0) {
                   state.decrement();
                 }
               },
@@ -148,7 +148,9 @@ class ActionItems extends StatelessWidget {
                   ],
                 ),
                 RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    GetIt.I.get<SessionState>().endSession();
+                  },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   elevation: 2,
                   color: Colors.grey[100],
