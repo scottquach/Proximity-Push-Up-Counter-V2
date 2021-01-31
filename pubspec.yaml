@@ -22,6 +22,7 @@ environment:
 
 dependencies:  
   sqflite: ^1.3.0
+  path:
   rxdart: ^0.25.0
   get_it: ^5.0.6
   flutter:

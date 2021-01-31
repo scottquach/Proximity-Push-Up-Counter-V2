@@ -189,7 +189,7 @@ class _SessionTimerState extends State<SessionTimer> {
     });
     periodic.listen((computation) {
       // print(computation);
-      if (state.startedCurrent) {
+      if (state.inProgressCurrent) {
         state.increaseSessionTime(1);
       }
     });
@@ -230,7 +230,7 @@ class _SessionTimerState extends State<SessionTimer> {
                 style: TextStyle(fontSize: 18),
               ),
               StreamBuilder<Object>(
-                  stream: state.sessionTimerStream,
+                  stream: state.sessionDurationStream,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data == 0) {
                       return Text('00:00',
