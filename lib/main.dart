@@ -4,8 +4,13 @@ import 'package:proximity_pushup_counter_v2/pages/loading.dart';
 import 'package:proximity_pushup_counter_v2/pages/logs.dart';
 import 'package:proximity_pushup_counter_v2/pages/session.dart';
 import 'package:proximity_pushup_counter_v2/session.dart';
+import 'package:get_it/get_it.dart';
+import 'package:proximity_pushup_counter_v2/states/session.state.dart';
+
+final getIt = GetIt.instance;
 
 void main() {
+  getIt.registerSingleton<SessionState>(SessionState()); 
   runApp(MyApp());
 }
 

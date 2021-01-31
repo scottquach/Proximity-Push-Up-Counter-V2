@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:proximity_pushup_counter_v2/states/session.state.dart';
 
 class SessionPage extends StatefulWidget {
   @override
@@ -6,7 +8,7 @@ class SessionPage extends StatefulWidget {
 }
 
 class _SessionPageState extends State<SessionPage> {
-  int progress = 0;
+  final state = GetIt.instance.get<SessionState>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +45,18 @@ class _SessionPageState extends State<SessionPage> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                progress += 1;
-                              });
+                              state.increment();
                             },
                             child: Center(
-                              child: Text(
-                                '$progress',
-                                style: TextStyle(fontSize: 164),
-                              ),
+                              child: StreamBuilder(
+                                  stream: state.progressStream,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snap) {
+                                    return Text(
+                                      '${snap.data}',
+                                      style: TextStyle(fontSize: 164),
+                                    );
+                                  }),
                             ),
                           ),
                         ),
@@ -60,8 +65,8 @@ class _SessionPageState extends State<SessionPage> {
                           iconSize: 64,
                           onPressed: () {
                             setState(() {
-                              if (progress > 0) {
-                                progress -= 1;
+                              if (state.progressCurrent > 0) {
+                                state.decrement();
                               }
                             });
                           },
@@ -74,28 +79,17 @@ class _SessionPageState extends State<SessionPage> {
             ),
             ActionItems(
               reset: () {
-                setState(() {
-                  progress = 0;
-                });
+                state.reset();
               },
               decrement: () {
-                setState(() {
-                  if (progress > 0) {
-                    progress -= 1;
-                  }
-                });
+                if (state.progressCurrent > 0) {
+                  state.decrement();
+                }
               },
             ),
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     Navigator.pushReplacementNamed(context, '/logs');
-      //   },
-      //   icon: Icon(Icons.stop),
-      //   label: Text('End Session'),
-      // ),
     );
   }
 }
@@ -122,27 +116,33 @@ class ActionItems extends StatelessWidget {
                   children: [
                     Container(
                       margin: EdgeInsets.only(right: 16),
+                      child: Tooltip(
+                        message: 'Reset the session',
+                        child: Ink(
+                          decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.grey[500])),
+                          child: IconButton(
+                            icon: Icon(Icons.replay),
+                            onPressed: reset,
+                            padding: EdgeInsets.all(16),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Tooltip(
+                      message: 'Decrement progress',
                       child: Ink(
                         decoration: BoxDecoration(
                             color: Colors.grey[100],
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.grey[500])),
                         child: IconButton(
-                          icon: Icon(Icons.replay),
-                          onPressed: reset,
+                          icon: Icon(Icons.exposure_minus_1),
+                          onPressed: decrement,
                           padding: EdgeInsets.all(16),
                         ),
-                      ),
-                    ),
-                    Ink(
-                      decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.grey[500])),
-                      child: IconButton(
-                        icon: Icon(Icons.exposure_minus_1),
-                        onPressed: decrement,
-                        padding: EdgeInsets.all(16),
                       ),
                     ),
                   ],
@@ -176,12 +176,7 @@ class SessionTimer extends StatefulWidget {
 
 class _SessionTimerState extends State<SessionTimer> {
   Stream periodic;
-  int seconds = 0;
-  int minutes = 0;
-  bool started = true;
-
-  String minutesFormatted = '00';
-  String secondsFormatted = '00';
+  final state = GetIt.instance.get<SessionState>();
 
   pad(int num, int size) {
     var s = "000000000" + num.toString();
@@ -193,17 +188,9 @@ class _SessionTimerState extends State<SessionTimer> {
       return computation;
     });
     periodic.listen((computation) {
-      print(computation);
-      if (started) {
-        setState(() {
-          this.seconds += 1;
-          if (this.seconds == 10) {
-            this.minutes += 1;
-            this.seconds = 0;
-          }
-          this.minutesFormatted = pad(this.minutes, 2);
-          this.secondsFormatted = pad(this.seconds, 2);
-        });
+      // print(computation);
+      if (state.startedCurrent) {
+        state.increaseSessionTime(1);
       }
     });
   }
@@ -242,8 +229,24 @@ class _SessionTimerState extends State<SessionTimer> {
                 'Session time',
                 style: TextStyle(fontSize: 18),
               ),
-              Text('$minutesFormatted:$secondsFormatted',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36)),
+              StreamBuilder<Object>(
+                  stream: state.sessionTimerStream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData || snapshot.data == 0) {
+                      return Text('00:00',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 36));
+                    }
+                    int minutes = ((snapshot.data as int) / 60).floor();
+                    int seconds = (snapshot.data as int) % 60;
+
+                    String minutesFormatted = pad(minutes, 2);
+                    String secondsFormatted = pad(seconds, 2);
+
+                    return Text('$minutesFormatted:$secondsFormatted',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 36));
+                  }),
             ],
           ),
         ),
