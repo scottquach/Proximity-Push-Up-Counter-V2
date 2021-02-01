@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:proximity_pushup_counter_v2/models/session.model.dart';
+import 'package:proximity_pushup_counter_v2/states/database.state.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
+import 'package:get_it/get_it.dart';
 
 class SessionState {
   BehaviorSubject _count = BehaviorSubject.seeded(0);
@@ -23,6 +24,7 @@ class SessionState {
     if (inProgressCurrent != true) {
       startSession();
     }
+    // GetIt.I.get<DBProvider>().getAllSessions();
   }
 
   decrement() {
@@ -37,10 +39,10 @@ class SessionState {
     _inProgress.add(true);
   }
 
-  endSession() {
+  Future<dynamic> endSession() async {
     var uuid = Uuid().v1();
     Duration duration = Duration(seconds: sessionDurationCurrent);
-    Session(
+    await Session(
       id: uuid,
       duration: duration,
       count: countCurrent,

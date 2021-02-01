@@ -149,7 +149,9 @@ class ActionItems extends StatelessWidget {
                 ),
                 RaisedButton(
                   onPressed: () {
-                    GetIt.I.get<SessionState>().endSession();
+                    GetIt.I.get<SessionState>().endSession().then((_) {
+                      Navigator.pushNamed(context, '/home');
+                    });
                   },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   elevation: 2,
