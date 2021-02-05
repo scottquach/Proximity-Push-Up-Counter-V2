@@ -21,7 +21,7 @@ class _SessionPageState extends State<SessionPage> {
               children: [
                 SessionTimer(),
                 Container(
-                  height: 550,
+                  height: 525,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.only(
@@ -33,15 +33,6 @@ class _SessionPageState extends State<SessionPage> {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        Opacity(
-                          opacity: .75,
-                          child: Text(
-                            'Place phone face up under face to use proximity sensor or tap screen to increment',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.75)),
-                          ),
-                        ),
                         Expanded(
                           child: InkWell(
                             onTap: () {
@@ -60,22 +51,33 @@ class _SessionPageState extends State<SessionPage> {
                             ),
                           ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 64,
-                          onPressed: () {
-                            setState(() {
-                              if (state.countCurrent > 0) {
-                                state.decrement();
-                              }
-                            });
-                          },
-                        )
+                        // IconButton(
+                        //   icon: Icon(Icons.arrow_drop_down),
+                        //   iconSize: 64,
+                        //   onPressed: () {
+                        //     setState(() {
+                        //       if (state.countCurrent > 0) {
+                        //         state.decrement();
+                        //       }
+                        //     });
+                        //   },
+                        // )
                       ],
                     ),
                   ),
                 ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Opacity(
+                opacity: .75,
+                child: Text(
+                  'Place phone face up under face to use proximity sensor or tap screen to increment',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.black.withOpacity(0.75)),
+                ),
+              ),
             ),
             ActionItems(
               reset: () {
@@ -215,7 +217,7 @@ class _SessionTimerState extends State<SessionTimer> {
   Widget build(BuildContext context) {
     return Positioned(
       child: Container(
-        height: 635,
+        height: 605,
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.only(

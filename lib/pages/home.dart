@@ -19,6 +19,12 @@ class _HomePageState extends State<HomePage> {
               },
               child: Text('Start session'),
             ),
+            FlatButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/logs');
+              },
+              child: Text('Session logs'),
+            ),
           ],
         ),
       ),
