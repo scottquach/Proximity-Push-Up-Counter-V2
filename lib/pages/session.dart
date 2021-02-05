@@ -152,7 +152,7 @@ class ActionItems extends StatelessWidget {
                 RaisedButton(
                   onPressed: () {
                     GetIt.I.get<SessionState>().endSession().then((_) {
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamed(context, '/logs');
                     });
                   },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

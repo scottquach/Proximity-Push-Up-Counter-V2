@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
+import 'package:proximity_pushup_counter_v2/models/session.model.dart';
+import 'package:proximity_pushup_counter_v2/states/database.state.dart';
+import 'package:proximity_pushup_counter_v2/widgets/log_highlight.dart';
+import 'package:intl/intl.dart';
 
 class LogsPage extends StatefulWidget {
   @override
@@ -42,6 +47,7 @@ class _LogsPageState extends State<LogsPage> {
               count: 234,
               improvement: -15,
             ),
+            Expanded(child: LogTable())
           ],
         ),
       ),
@@ -49,75 +55,67 @@ class _LogsPageState extends State<LogsPage> {
   }
 }
 
-class LogHighlight extends StatelessWidget {
-  final String category;
-  final IconData categoryIcon;
-  final int count;
-  final int improvement;
+class LogTable extends StatefulWidget {
+  @override
+  _LogTableState createState() => _LogTableState();
+}
 
-  LogHighlight(
-      {this.category, this.categoryIcon, this.count, this.improvement});
+class _LogTableState extends State<LogTable> {
+  final db = GetIt.instance.get<DBProvider>();
+  final dateFormatter = DateFormat('MM/dd/yyyy');
+
+  List<Session> sessions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    db.getAllSessions().then((List<dynamic> res) {
+      if (res.length > 0) {
+        res.forEach((item) {
+          Session session = Session(
+              id: item['session_id'],
+              count: item['count'],
+              duration: Duration(seconds: item['duration']),
+              dailyGoal: item['daily_goal'],
+              entryTime: DateTime.parse(item['entry_time']));
+
+          setState(() {
+            sessions.add(session);
+          });
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12, left: 12, right: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 12),
-                padding: EdgeInsets.all(12),
-                decoration: ShapeDecoration(
-                  color: Colors.grey[300],
-                  shape: CircleBorder(),
-                ),
-                child: FaIcon(
-                  categoryIcon,
-                  size: 18,
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '$category',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      margin: EdgeInsets.only(top: 8),
+      // width: double.infinity,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: DataTable(
+            columns: const <DataColumn>[
+              DataColumn(label: Text('Day')),
+              DataColumn(label: Text('Count'), numeric: true),
+              DataColumn(label: Text('Goal met'))
+            ],
+            rows: sessions.map((session) {
+              return DataRow(cells: [
+                DataCell(Text(dateFormatter.format(session.entryTime))),
+                DataCell(Text(session.count.toString())),
+                DataCell(Center(
+                  child: FaIcon(
+                    session.count > session.dailyGoal
+                        ? FontAwesomeIcons.checkCircle
+                        : FontAwesomeIcons.timesCircle,
+                    color: session.count > session.dailyGoal
+                        ? Colors.greenAccent[700]
+                        : Colors.redAccent,
                   ),
-                  Text(
-                    '$count Pushups',
-                    style: TextStyle(fontSize: 18),
-                  )
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Text(
-                  improvement > 0 ? '+$improvement' : '$improvement',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: improvement > 0 ? Colors.greenAccent[700] : Colors.redAccent[400]),
-                ),
-              ),
-              Container(
-                child: FaIcon(
-                    improvement > 0
-                        ? FontAwesomeIcons.arrowUp
-                        : FontAwesomeIcons.arrowDown,
-                    size: 12,
-                    color: improvement > 0 ? Colors.greenAccent[700] : Colors.redAccent[400]),
-              )
-            ],
-          )
-        ],
+                )),
+              ]);
+            }).toList()),
       ),
     );
   }

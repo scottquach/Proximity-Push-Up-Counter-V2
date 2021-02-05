@@ -51,9 +51,10 @@ class DBProvider {
     return insertResult;
   }
 
-  Future<dynamic> getAllSessions() async {
+  Future<List<dynamic>> getAllSessions() async {
     final db = await database;
     var res = await db.query('logs');
-    print(res);
+    // print(res);
+    return res;
   }
 }

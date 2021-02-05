@@ -27,6 +27,7 @@ dependencies:
   rxdart: ^0.25.0
   get_it: ^5.0.6 
   uuid: 2.2.2
+  intl: ^0.16.1
   flutter:
     sdk: flutter
 
