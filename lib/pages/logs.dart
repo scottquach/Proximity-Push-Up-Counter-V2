@@ -12,6 +12,8 @@ class LogsPage extends StatefulWidget {
 }
 
 class _LogsPageState extends State<LogsPage> {
+  final db = GetIt.instance.get<DBProvider>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,24 +31,50 @@ class _LogsPageState extends State<LogsPage> {
                 ),
               ),
             ),
-            LogHighlight(
-              category: 'Today',
-              categoryIcon: FontAwesomeIcons.calendarDay,
-              count: 12,
-              improvement: 4,
+            FutureBuilder(
+              future: db.getLastDaySession(),
+              builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
+                if (snapshot.hasData) {
+                  // print(snapshot.data);
+                  return LogHighlight(
+                    category: 'Last Day',
+                    categoryIcon: FontAwesomeIcons.calendarDay,
+                    count: snapshot.data['today'],
+                    improvement:
+                        snapshot.data['today'] - snapshot.data['yesterday'],
+                  );
+                } else
+                  return Text('');
+              },
             ),
-            LogHighlight(
-              category: 'Week',
-              categoryIcon: FontAwesomeIcons.calendarWeek,
-              count: 52,
-              improvement: 12,
-            ),
-            LogHighlight(
-              category: 'Month',
-              categoryIcon: FontAwesomeIcons.calendarAlt,
-              count: 234,
-              improvement: -15,
-            ),
+            FutureBuilder(
+                future: db.getLastWeekSession(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return LogHighlight(
+                      category: 'Last 7 Days',
+                      categoryIcon: FontAwesomeIcons.calendarWeek,
+                      count: snapshot.data['week'],
+                      improvement:
+                          snapshot.data['week'] - snapshot.data['lastWeek'],
+                    );
+                  } else
+                    return Text('');
+                }),
+            FutureBuilder(
+                future: db.getLastMonthSessions(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return LogHighlight(
+                      category: 'Last 30 Days',
+                      categoryIcon: FontAwesomeIcons.calendarAlt,
+                      count: snapshot.data['month'],
+                      improvement:
+                          snapshot.data['month'] - snapshot.data['lastMonth'],
+                    );
+                  } else
+                    return Text('');
+                }),
             Expanded(child: LogTable())
           ],
         ),
