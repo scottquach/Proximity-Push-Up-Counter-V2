@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:proximity_pushup_counter_v2/models/session.model.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:date_util/date_util.dart';
 
 class DBProvider {
   static Database _database;
@@ -59,12 +58,6 @@ class DBProvider {
   Future<Map> getLastDaySession() async {
     final db = await database;
 
-    String today = DateTime.now()
-        .subtract(new Duration(hours: DateTime.now().hour))
-        .toIso8601String();
-    String yesterday = DateTime.now()
-        .subtract(new Duration(hours: DateTime.now().hour, days: 1))
-        .toIso8601String();
     var todaySummary = await db.rawQuery('''
       select coalesce(sum(count), 0) as "count" from logs where date(entry_time) > date('now', '-1 days')
     ''');
@@ -83,17 +76,6 @@ class DBProvider {
 
   Future<Map> getLastWeekSession() async {
     final db = await database;
-
-    String thisWeek = DateTime.now()
-        .subtract(new Duration(
-            days: DateTime.now().weekday, hours: DateTime.now().hour))
-        .toIso8601String();
-    String lastWeek = DateTime.now()
-        .subtract(new Duration(
-            days: DateTime.now().weekday + 7, hours: DateTime.now().hour))
-        .toIso8601String();
-    // print(thisWeek);
-    // print(lastWeek);
 
     var weekSummary = await db.rawQuery('''
       select coalesce(sum(count), 0) as "count" from logs where date(entry_time) > date('now', '-7 days')

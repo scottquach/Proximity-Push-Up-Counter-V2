@@ -28,7 +28,6 @@ dependencies:
     get_it: ^5.0.6
     uuid: 2.2.2
     intl: ^0.16.1
-    date_util: ^0.1.4
     flutter:
         sdk: flutter
 

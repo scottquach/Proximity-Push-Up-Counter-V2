@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proximity_pushup_counter_v2/widgets/goal_readout.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             HomeHeader(),
+            GoalReadout(),
             FlatButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/session');
