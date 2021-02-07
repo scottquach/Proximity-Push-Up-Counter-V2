@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:proximity_pushup_counter_v2/states/session.state.dart';
@@ -181,7 +183,7 @@ class SessionTimer extends StatefulWidget {
 }
 
 class _SessionTimerState extends State<SessionTimer> {
-  Stream periodic;
+  Timer periodic;
   final state = GetIt.instance.get<SessionState>();
 
   pad(int num, int size) {
@@ -190,11 +192,7 @@ class _SessionTimerState extends State<SessionTimer> {
   }
 
   startPeriodic() {
-    periodic = Stream.periodic(Duration(seconds: 1), (computation) {
-      return computation;
-    });
-    periodic.listen((computation) {
-      // print(computation);
+    periodic = Timer.periodic(Duration(seconds: 1), (computation) {
       if (state.inProgressCurrent) {
         state.increaseSessionTime(1);
       }
@@ -205,6 +203,8 @@ class _SessionTimerState extends State<SessionTimer> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    periodic.cancel();
+    state.reset();
   }
 
   @override
