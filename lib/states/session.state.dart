@@ -42,11 +42,12 @@ class SessionState {
   Future<dynamic> endSession() async {
     var uuid = Uuid().v1();
     Duration duration = Duration(seconds: sessionDurationCurrent);
+    int dailyGoal = int.parse(await GetIt.I.get<DBProvider>().getDailyGoal());
     await Session(
       id: uuid,
       duration: duration,
       count: countCurrent,
-      dailyGoal: 0,
+      dailyGoal: dailyGoal,
       entryTime: DateTime.now().subtract(duration)
     ).saveSession();
 

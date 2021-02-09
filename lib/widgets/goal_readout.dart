@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
+import 'package:proximity_pushup_counter_v2/states/database.state.dart';
 import 'package:proximity_pushup_counter_v2/widgets/goal_edit.dart';
 
 class GoalReadout extends StatelessWidget {
   final int todaysCount = 5;
   final int dailyGoal = 25;
+  final db = GetIt.I.get<DBProvider>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,32 +39,33 @@ class GoalReadout extends StatelessWidget {
                         return GoalEdit();
                       },
                       context: context);
-                  // Scaffold.of(context)
-                  //     .showBottomSheet<void>((BuildContext context) {
-                  // });
                 },
               )
             ],
           ),
-          RichText(
-            text: TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 32),
-                children: [
-                  TextSpan(
-                      text: '5',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 64,
-                      )),
-                  TextSpan(text: ' out of '),
-                  TextSpan(
-                      text: '25',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 64,
-                      ))
-                ]),
-          )
+          FutureBuilder<Object>(
+              future: db.getDailyGoal(),
+              builder: (context, snap) {
+                return RichText(
+                  text: TextSpan(
+                      style: TextStyle(color: Colors.black, fontSize: 32),
+                      children: [
+                        TextSpan(
+                            text: '5',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 64,
+                            )),
+                        TextSpan(text: ' out of '),
+                        TextSpan(
+                            text: '${snap.data}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 64,
+                            ))
+                      ]),
+                );
+              })
         ],
       ),
     );

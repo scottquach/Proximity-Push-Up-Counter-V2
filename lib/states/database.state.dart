@@ -30,12 +30,31 @@ class DBProvider {
 
       await db.execute('''
           CREATE TABLE settings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            setting INTEGER,
+            setting TEXT PRIMARY KEY,
             value TEXT
           ) 
         ''');
     }, version: 1);
+  }
+
+  getDailyGoal() async {
+    final db = await database;
+    List<Map> maps = await db.query('settings', where: 'setting = ?', whereArgs: ['daily_goal']);
+    print(maps);
+    if (maps.length != 1) {
+      return 10;
+    }
+    return maps[0]['value'];
+  }
+
+  saveDailyGoal(int goal) async {
+    final db = await database;
+    var result = await db.insert('settings', {
+      'setting': 'daily_goal',
+      'value': goal
+    },conflictAlgorithm: ConflictAlgorithm.replace);
+    print(result);
+    return result;
   }
 
   insertNewSession(Session newSession) async {

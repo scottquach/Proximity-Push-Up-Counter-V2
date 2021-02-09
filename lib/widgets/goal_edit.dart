@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
+import 'package:proximity_pushup_counter_v2/states/database.state.dart';
 
 class GoalEdit extends StatefulWidget {
   @override
@@ -8,6 +10,17 @@ class GoalEdit extends StatefulWidget {
 
 class _GoalEditState extends State<GoalEdit> {
   int currentGoal = 25;
+
+  @override
+  void initState() {
+    GetIt.instance.get<DBProvider>().getDailyGoal().then((goal) {
+      print(goal);
+      setState(() {
+        currentGoal = int.parse(goal);
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +114,17 @@ class _GoalEditState extends State<GoalEdit> {
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: () {
-                Navigator.pop(context);
+                GetIt.I
+                    .get<DBProvider>()
+                    .saveDailyGoal(currentGoal)
+                    .then((res) {
+                  Navigator.pop(context);
+                });
               },
-              icon: FaIcon(FontAwesomeIcons.save, size: 18,),
+              icon: FaIcon(
+                FontAwesomeIcons.save,
+                size: 18,
+              ),
               label: Text('Save'),
             ),
           )
