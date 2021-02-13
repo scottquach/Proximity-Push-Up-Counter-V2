@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:get_it/get_it.dart';
 import 'package:path/path.dart';
 import 'package:proximity_pushup_counter_v2/models/session.model.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'general.state.dart';
 
 class DBProvider {
   static Database _database;
@@ -39,7 +42,8 @@ class DBProvider {
 
   getDailyGoal() async {
     final db = await database;
-    List<Map> maps = await db.query('settings', where: 'setting = ?', whereArgs: ['daily_goal']);
+    List<Map> maps = await db
+        .query('settings', where: 'setting = ?', whereArgs: ['daily_goal']);
     print(maps);
     if (maps.length != 1) {
       return 10;
@@ -47,13 +51,19 @@ class DBProvider {
     return maps[0]['value'];
   }
 
+  Future<Map> getTodaySummary() async {
+    int dailyGoal = int.parse(await getDailyGoal());
+    int todayCount = (await getLastDaySession())['today'];
+    return {'dailyGoal': dailyGoal, 'todayCount': todayCount};
+  }
+
   saveDailyGoal(int goal) async {
     final db = await database;
-    var result = await db.insert('settings', {
-      'setting': 'daily_goal',
-      'value': goal
-    },conflictAlgorithm: ConflictAlgorithm.replace);
+    var result = await db.insert(
+        'settings', {'setting': 'daily_goal', 'value': goal},
+        conflictAlgorithm: ConflictAlgorithm.replace);
     print(result);
+    GetIt.I.get<GeneralState>().updateDailyGoal(goal);
     return result;
   }
 
@@ -64,6 +74,7 @@ class DBProvider {
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     print(insertResult);
+    GetIt.I.get<GeneralState>().updateDailyGoal(newSession.count);
     return insertResult;
   }
 

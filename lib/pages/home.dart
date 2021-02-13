@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:proximity_pushup_counter_v2/states/database.state.dart';
+import 'package:proximity_pushup_counter_v2/states/general.state.dart';
 import 'package:proximity_pushup_counter_v2/widgets/goal_readout.dart';
 
 class HomePage extends StatefulWidget {
@@ -7,6 +10,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    GetIt.I.get<GeneralState>().setInitialState();
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

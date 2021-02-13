@@ -5,14 +5,17 @@ import 'package:proximity_pushup_counter_v2/pages/logs.dart';
 import 'package:proximity_pushup_counter_v2/pages/session.dart';
 import 'package:get_it/get_it.dart';
 import 'package:proximity_pushup_counter_v2/states/database.state.dart';
+import 'package:proximity_pushup_counter_v2/states/general.state.dart';
 import 'package:proximity_pushup_counter_v2/states/session.state.dart';
 
 final getIt = GetIt.instance;
 
 void main() {
+  getIt.registerSingleton<GeneralState>(GeneralState());
   getIt.registerSingleton<SessionState>(SessionState()); 
   getIt.registerSingleton<DBProvider>(DBProvider());
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {

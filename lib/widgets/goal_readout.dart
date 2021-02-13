@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:proximity_pushup_counter_v2/states/database.state.dart';
+import 'package:proximity_pushup_counter_v2/states/general.state.dart';
 import 'package:proximity_pushup_counter_v2/widgets/goal_edit.dart';
 
 class GoalReadout extends StatelessWidget {
   final int todaysCount = 5;
   final int dailyGoal = 25;
   final db = GetIt.I.get<DBProvider>();
+  final generalState = GetIt.I.get<GeneralState>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +45,29 @@ class GoalReadout extends StatelessWidget {
               )
             ],
           ),
-          FutureBuilder<Object>(
-              future: db.getDailyGoal(),
+          StreamBuilder<Object>(
+              stream: generalState.dailyGoalAndCountStream$,
               builder: (context, snap) {
+                print(snap);
+                if (!snap.hasData) {
+                  return Text("");
+                }
+                int dailyCount = (snap.data as Map)["dailyCount"];
+                int dailyGoal = (snap.data as Map)["dailyGoal"];
+
                 return RichText(
                   text: TextSpan(
                       style: TextStyle(color: Colors.black, fontSize: 32),
                       children: [
                         TextSpan(
-                            text: '5',
+                            text: '${dailyCount.toString()}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 64,
                             )),
                         TextSpan(text: ' out of '),
                         TextSpan(
-                            text: '${snap.data}',
+                            text: '${dailyGoal.toString()}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 64,

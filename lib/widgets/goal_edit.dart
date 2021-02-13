@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:proximity_pushup_counter_v2/states/database.state.dart';
+import 'package:proximity_pushup_counter_v2/states/general.state.dart';
 
 class GoalEdit extends StatefulWidget {
   @override
@@ -9,15 +10,13 @@ class GoalEdit extends StatefulWidget {
 }
 
 class _GoalEditState extends State<GoalEdit> {
-  int currentGoal = 25;
+  final generalState = GetIt.I.get<GeneralState>();
+  int currentGoal = 0;
 
   @override
   void initState() {
-    GetIt.instance.get<DBProvider>().getDailyGoal().then((goal) {
-      print(goal);
-      setState(() {
-        currentGoal = int.parse(goal);
-      });
+    setState(() {
+      this.currentGoal = this.generalState.dailyGoalCurrent;
     });
     super.initState();
   }

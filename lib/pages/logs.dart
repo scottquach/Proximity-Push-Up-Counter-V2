@@ -20,15 +20,31 @@ class _LogsPageState extends State<LogsPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  'Session Logs',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8, top: 8),
+              child: Row(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: FaIcon(FontAwesomeIcons.angleLeft),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/home');
+                      },
+                    ),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        'Session Logs',
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             FutureBuilder(
