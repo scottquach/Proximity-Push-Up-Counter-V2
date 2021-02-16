@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:proximity_pushup_counter_v2/states/database.state.dart';
 import 'package:proximity_pushup_counter_v2/states/general.state.dart';
@@ -25,21 +26,41 @@ class _HomePageState extends State<HomePage> {
           children: [
             HomeHeader(),
             GoalReadout(),
-            FlatButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/session');
-              },
-              child: Text('Start session'),
-            ),
-            FlatButton(
-              onPressed: () {
+            InkWell(
+              onTap: () {
                 Navigator.pushNamed(context, '/logs');
               },
-              child: Text('Session logs'),
+              child: Container(
+                margin: EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Logs',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                    ),
+                    Icon(
+                      FontAwesomeIcons.clipboardList
+                    )
+                  ],
+                ),
+              ),
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.pushNamed(context, '/session');
+          },
+          tooltip: 'Start session',
+          label: Text('Start session'),
+          icon: Icon(Icons.play_arrow_rounded)),
     );
   }
 }

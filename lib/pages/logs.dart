@@ -27,7 +27,7 @@ class _LogsPageState extends State<LogsPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: FaIcon(FontAwesomeIcons.angleLeft),
+                      icon: Icon(Icons.chevron_left_rounded, size: 32,),
                       onPressed: () {
                         Navigator.pushNamed(context, '/home');
                       },

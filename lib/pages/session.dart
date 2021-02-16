@@ -21,6 +21,7 @@ class _SessionPageState extends State<SessionPage> {
           children: [
             Stack(
               children: [
+                Text('hello there'),
                 SessionTimer(),
                 Container(
                   height: 525,
@@ -53,21 +54,38 @@ class _SessionPageState extends State<SessionPage> {
                             ),
                           ),
                         ),
-                        // IconButton(
-                        //   icon: Icon(Icons.arrow_drop_down),
-                        //   iconSize: 64,
-                        //   onPressed: () {
-                        //     setState(() {
-                        //       if (state.countCurrent > 0) {
-                        //         state.decrement();
-                        //       }
-                        //     });
-                        //   },
-                        // )
                       ],
                     ),
                   ),
                 ),
+                Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.chevron_left_rounded,
+                          size: 32,
+                        ),
+                        onPressed: () {
+                          state.reset();
+                          Navigator.pushNamed(context, '/home');
+                        },
+                      ),
+                    ),
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          'Active Session',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
             Padding(
