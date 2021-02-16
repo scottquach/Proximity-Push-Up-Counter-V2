@@ -69,7 +69,7 @@ class _SessionPageState extends State<SessionPage> {
                         ),
                         onPressed: () {
                           state.reset();
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/home');
                         },
                       ),
                     ),
@@ -172,7 +172,7 @@ class ActionItems extends StatelessWidget {
                 RaisedButton(
                   onPressed: () {
                     GetIt.I.get<SessionState>().endSession().then((_) {
-                      Navigator.pushNamed(context, '/logs');
+                      Navigator.pushReplacementNamed(context, '/logs');
                     });
                   },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -220,9 +220,9 @@ class _SessionTimerState extends State<SessionTimer> {
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     periodic.cancel();
     state.reset();
+    super.dispose();
   }
 
   @override
