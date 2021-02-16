@@ -89,11 +89,11 @@ class DBProvider {
     final db = await database;
 
     var todaySummary = await db.rawQuery('''
-      select coalesce(sum(count), 0) as "count" from logs where date(entry_time) > date('now', '-1 days')
+      select coalesce(sum(count), 0) as "count" from logs where date(entry_time, 'localtime') > date('now', '-1 days', 'localtime')
     ''');
 
     var yesterdaySummary = await db.rawQuery('''
-      select coalesce(sum(count), 0) as "count" from logs where date(entry_time) < date('now', '-1 days') and date(entry_time) > date('now', '-2 days')
+      select coalesce(sum(count), 0) as "count" from logs where date(entry_time, 'localtime') < date('now', '-1 days', 'localtime') and date(entry_time, 'localtime') > date('now', '-2 days', 'localtime')
     ''');
 
     var response = {
@@ -108,11 +108,11 @@ class DBProvider {
     final db = await database;
 
     var weekSummary = await db.rawQuery('''
-      select coalesce(sum(count), 0) as "count" from logs where date(entry_time) > date('now', '-7 days')
+      select coalesce(sum(count), 0) as "count" from logs where date(entry_time, 'localtime') > date('now', '-7 days', 'localtime')
     ''');
 
     var lastWeekSummary = await db.rawQuery('''
-      select coalesce(sum(count), 0) as "count" from logs where date(entry_time) < date('now', '-7 days') and date(entry_time) > date('now', '-14 days')
+      select coalesce(sum(count), 0) as "count" from logs where date(entry_time, 'localtime') < date('now', '-7 days', 'localtime') and date(entry_time, 'localtime') > date('now', '-14 days', 'localtime')
     ''');
 
     var response = {
@@ -127,11 +127,11 @@ class DBProvider {
     final db = await database;
 
     var monthSummary = await db.rawQuery('''
-      select coalesce(sum(count), 0) as "count" from logs where date(entry_time) > date('now', '-30 days')
+      select coalesce(sum(count), 0) as "count" from logs where date(entry_time, 'localtime') > date('now', '-30 days', 'localtime')
     ''');
 
     var lastMonthSummary = await db.rawQuery('''
-      select coalesce(sum(count), 0) as "count" from logs where date(entry_time) < date('now', '-30 days') and date(entry_time) > date('now', '-60 days')
+      select coalesce(sum(count), 0) as "count" from logs where date(entry_time, 'localtime') < date('now', '-30 days', 'localtime') and date(entry_time, 'localtime') > date('now', '-60 days', 'localtime')
     ''');
 
     var response = {
