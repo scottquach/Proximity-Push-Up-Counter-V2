@@ -80,7 +80,7 @@ class DBProvider {
 
   Future<List<dynamic>> getAllSessions() async {
     final db = await database;
-    var res = await db.query('logs');
+    var res = await db.query('logs', orderBy: 'entry_time desc');
     // print(res);
     return res;
   }
