@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:proximity_pushup_counter_v2/states/session.state.dart';
@@ -11,6 +12,7 @@ class SessionPage extends StatefulWidget {
 
 class _SessionPageState extends State<SessionPage> {
   final state = GetIt.instance.get<SessionState>();
+  AudioCache audioPlayer = AudioCache();
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,8 @@ class _SessionPageState extends State<SessionPage> {
                                   stream: state.countStream,
                                   builder: (BuildContext context,
                                       AsyncSnapshot snap) {
+                                    audioPlayer.clearCache();
+                                    audioPlayer.play('sound_button_tap.mp3');
                                     return Text(
                                       '${snap.data}',
                                       style: TextStyle(fontSize: 164),
