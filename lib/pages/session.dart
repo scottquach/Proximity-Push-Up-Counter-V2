@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:proximity_pushup_counter_v2/states/general.state.dart';
 import 'package:proximity_pushup_counter_v2/states/session.state.dart';
 
 class SessionPage extends StatefulWidget {
@@ -12,7 +14,16 @@ class SessionPage extends StatefulWidget {
 
 class _SessionPageState extends State<SessionPage> {
   final state = GetIt.instance.get<SessionState>();
-  AudioCache audioPlayer = AudioCache();
+  final generalState = GetIt.instance.get<GeneralState>();
+  AudioPlayer incrementPlayer = new AudioPlayer();
+  AudioCache incrementPlayerCache;
+
+  @override
+  void initState() {
+    incrementPlayerCache = AudioCache(fixedPlayer: incrementPlayer);
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +59,14 @@ class _SessionPageState extends State<SessionPage> {
                                   stream: state.countStream,
                                   builder: (BuildContext context,
                                       AsyncSnapshot snap) {
-                                    audioPlayer.clearCache();
-                                    audioPlayer.play('sound_button_tap.mp3');
+                                    if (state.countCurrent ==
+                                        generalState.dailyGoalCurrent) {
+                                      AudioCache().play('sound_ta_da.mp3');
+                                    }
+
+                                    incrementPlayerCache
+                                        .play('sound_button_tap.mp3')
+                                        .then((player) {});
                                     return Text(
                                       '${snap.data}',
                                       style: TextStyle(fontSize: 164),
