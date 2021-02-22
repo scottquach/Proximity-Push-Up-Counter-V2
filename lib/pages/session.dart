@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:proximity_pushup_counter_v2/states/general.state.dart';
 import 'package:proximity_pushup_counter_v2/states/session.state.dart';
+import 'package:proximity_plugin/proximity_plugin.dart';
 
 class SessionPage extends StatefulWidget {
   @override
@@ -18,8 +19,25 @@ class _SessionPageState extends State<SessionPage> {
   AudioPlayer incrementPlayer = new AudioPlayer();
   AudioCache incrementPlayerCache;
 
+  playIncrementAudio() {
+    if (state.countCurrent == generalState.dailyGoalCurrent) {
+      AudioCache().play('sound_ta_da.mp3');
+    }
+
+    incrementPlayerCache.play('sound_button_tap.mp3').then((player) {});
+  }
+
   @override
   void initState() {
+    proximityEvents.listen((ProximityEvent event) {
+      if (event.x == 'Yes') {
+        state.increment();
+        playIncrementAudio();
+      }
+
+      print(event.x);
+      // Do something with the event.
+    });
     incrementPlayerCache = AudioCache(fixedPlayer: incrementPlayer);
     // TODO: implement initState
     super.initState();
@@ -34,7 +52,6 @@ class _SessionPageState extends State<SessionPage> {
           children: [
             Stack(
               children: [
-                Text('hello there'),
                 SessionTimer(),
                 Container(
                   height: 525,
@@ -59,14 +76,7 @@ class _SessionPageState extends State<SessionPage> {
                                   stream: state.countStream,
                                   builder: (BuildContext context,
                                       AsyncSnapshot snap) {
-                                    if (state.countCurrent ==
-                                        generalState.dailyGoalCurrent) {
-                                      AudioCache().play('sound_ta_da.mp3');
-                                    }
-
-                                    incrementPlayerCache
-                                        .play('sound_button_tap.mp3')
-                                        .then((player) {});
+                                    playIncrementAudio();
                                     return Text(
                                       '${snap.data}',
                                       style: TextStyle(fontSize: 164),

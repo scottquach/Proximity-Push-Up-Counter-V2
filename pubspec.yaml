@@ -29,6 +29,8 @@ dependencies:
     uuid: 2.2.2
     intl: ^0.16.1
     audioplayers: ^0.17.4
+    proximity_plugin: ^1.0.2
+
 
     flutter:
         sdk: flutter
