@@ -1,6 +1,6 @@
 # proximity_pushup_counter_v2
 
-A new Flutter project.
+This is a small rebuild of an existing native Android application produced by myself of the same nature. My main goal of this project was to learn more about the Flutter framework and to bring some UI enahcements. You can view the original project here [scottquach/Proximity-Push-Up-Counter](https://github.com/scottquach/Proximity-Push-Up-Counter)
 
 ## Getting Started
 
